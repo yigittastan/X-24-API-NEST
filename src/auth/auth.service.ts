@@ -1,10 +1,23 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
-import { RegisterDto } from './dto/register.dto';
-import { LoginDto } from './dto/login.dto';
-import { AuthResponseDto } from './dto/auth-response.dto';
-import * as bcrypt from 'bcrypt';
+import { User } from '../users/schemas/users.schema';
+
+export interface JwtPayload {
+  email: string;
+  sub: string;
+  iat?: number;
+  exp?: number;
+}
+
+export interface LoginResponse {
+  access_token: string;
+  user: {
+    id: string;
+    email: string;
+    fullName: string;
+  };
+}
 
 @Injectable()
 export class AuthService {
@@ -13,47 +26,51 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async register(registerDto: RegisterDto): Promise<AuthResponseDto> {
-    const user = await this.usersService.create(registerDto);
-    const payload = { email: user.email, sub: user._id, role: user.role };
-    
-    return {
-      access_token: this.jwtService.sign(payload),
-      user: {
-        id: user._id.toString(),
-        email: user.email,
-        fullName: user.fullName,
-        role: user.role,
-      },
-    };
+  async validateUser(email: string, password: string): Promise<Omit<User, 'password'> | null> {
+    try {
+      const user = await this.usersService.validateUser(email, password);
+      if (user) {
+        // Şifreyi çıkar
+        const { password, ...result } = user.toObject();
+        return result;
+      }
+      return null;
+    } catch (error) {
+      // UsersService'den gelen hataları yakala
+      if (error instanceof UnauthorizedException) {
+        return null;
+      }
+      throw error;
+    }
   }
 
-  async login(loginDto: LoginDto): Promise<AuthResponseDto> {
-    const user = await this.validateUser(loginDto.email, loginDto.password);
-    const payload = { email: user.email, sub: user._id, role: user.role };
-    
-    return {
-      access_token: this.jwtService.sign(payload),
-      user: {
-        id: user._id.toString(),
-        email: user.email,
-        fullName: user.fullName,
-        role: user.role,
-      },
-    };
-  }
-
-  private async validateUser(email: string, password: string) {
-    const user = await this.usersService.findByEmail(email);
+  async login(user: any): Promise<LoginResponse> {
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('Geçersiz kullanıcı');
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
+    const payload: JwtPayload = { 
+      email: user.email, 
+      sub: user._id.toString() 
+    };
 
-    return user;
+    const access_token = this.jwtService.sign(payload);
+
+    return {
+      access_token,
+      user: {
+        id: user._id.toString(),
+        email: user.email,
+        fullName: user.fullName,
+      },
+    };
+  }
+
+  async verifyToken(token: string): Promise<JwtPayload> {
+    try {
+      return this.jwtService.verify(token);
+    } catch (error) {
+      throw new UnauthorizedException('Geçersiz token');
+    }
   }
 }

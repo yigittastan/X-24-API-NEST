@@ -1,86 +1,124 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
+import { 
+  Body, 
+  Controller, 
+  Get, 
+  Param, 
+  Patch, 
+  Post, 
   UseGuards,
+  Request,
 } from '@nestjs/common';
-import {
-  ApiTags,
-  ApiOperation,
+import { 
+  ApiTags, 
+  ApiOperation, 
   ApiResponse,
   ApiBearerAuth,
+  ApiParam,
+  ApiBody,
 } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UserResponseDto } from './dto/user-response.dto';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
-import { RolesGuard } from '../common/guards/roles.guard';
-import { Roles } from '../common/decorators/roles.decorator';
-import { UserRole } from '../common/enums/role.enum';
 
 @ApiTags('Users')
-@ApiBearerAuth('JWT-auth')
-@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  @Roles(UserRole.ADMIN)
-  @ApiOperation({ summary: 'Create a new user' })
-  @ApiResponse({ status: 201, description: 'User created', type: UserResponseDto })
-  async create(@Body() createUserDto: CreateUserDto): Promise<UserResponseDto> {
-    const user = await this.usersService.create(createUserDto);
-    return this.usersService.mapToResponseDto(user); // Artık public
+  @ApiOperation({ summary: 'Yeni kullanıcı oluştur' })
+  @ApiBody({ type: CreateUserDto })
+  @ApiResponse({ 
+    status: 201, 
+    description: 'Kullanıcı başarıyla oluşturuldu',
+    schema: {
+      type: 'object',
+      properties: {
+        id: { type: 'string' },
+        email: { type: 'string' },
+        fullName: { type: 'string' },
+        createdAt: { type: 'string' },
+        updatedAt: { type: 'string' },
+      },
+    },
+  })
+  @ApiResponse({ status: 409, description: 'Email adresi zaten kullanılıyor' })
+  @ApiResponse({ status: 400, description: 'Geçersiz veri formatı' })
+  create(@Body() createUserDto: CreateUserDto) {
+    return this.usersService.create(createUserDto);
   }
 
   @Get()
-  @Roles(UserRole.ADMIN)
-  @ApiOperation({ summary: 'Get all users' })
-  @ApiResponse({ status: 200, description: 'List of users', type: [UserResponseDto] })
-  async findAll(): Promise<UserResponseDto[]> {
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Tüm kullanıcıları listele' })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Kullanıcı listesi başarıyla getirildi',
+    schema: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          id: { type: 'string' },
+          email: { type: 'string' },
+          fullName: { type: 'string' },
+          createdAt: { type: 'string' },
+          updatedAt: { type: 'string' },
+        },
+      },
+    },
+  })
+  @ApiResponse({ status: 401, description: 'Yetkisiz erişim' })
+  findAll() {
     return this.usersService.findAll();
   }
 
+  @Get('profile')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Kendi profil bilgilerini getir' })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Profil bilgileri başarıyla getirildi',
+  })
+  @ApiResponse({ status: 401, description: 'Yetkisiz erişim' })
+  getProfile(@Request() req) {
+    return req.user;
+  }
+
   @Get(':id')
-  @Roles(UserRole.ADMIN, UserRole.USER)
-  @ApiOperation({ summary: 'Get user by ID' })
-  @ApiResponse({ status: 200, description: 'User found', type: UserResponseDto })
-  @ApiResponse({ status: 404, description: 'User not found' })
-  async findById(@Param('id') id: string): Promise<UserResponseDto> {
-    const user = await this.usersService.findById(id);
-    return this.usersService.mapToResponseDto(user);
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'ID ile kullanıcı getir' })
+  @ApiParam({ name: 'id', description: 'Kullanıcı ID', type: 'string' })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Kullanıcı başarıyla getirildi',
+  })
+  @ApiResponse({ status: 404, description: 'Kullanıcı bulunamadı' })
+  @ApiResponse({ status: 400, description: 'Geçersiz ID formatı' })
+  @ApiResponse({ status: 401, description: 'Yetkisiz erişim' })
+  findOne(@Param('id') id: string) {
+    return this.usersService.findOne(id);
   }
 
   @Patch(':id')
-  @Roles(UserRole.ADMIN)
-  @ApiOperation({ summary: 'Update user by ID' })
-  @ApiResponse({ status: 200, description: 'User updated', type: UserResponseDto })
-  @ApiResponse({ status: 404, description: 'User not found' })
-  async update(@Param('id') id: string, @Body() dto: UpdateUserDto): Promise<UserResponseDto> {
-    return this.usersService.update(id, dto);
-  }
-
-  @Delete(':id')
-  @Roles(UserRole.ADMIN)
-  @ApiOperation({ summary: 'Delete user by ID' })
-  @ApiResponse({ status: 200, description: 'User deleted' })
-  @ApiResponse({ status: 404, description: 'User not found' })
-  async remove(@Param('id') id: string): Promise<void> {
-    return this.usersService.remove(id);
-  }
-
-  @Patch(':id/last-login')
-  @Roles(UserRole.ADMIN)
-  @ApiOperation({ summary: 'Update user\'s last login timestamp' })
-  @ApiResponse({ status: 200, description: 'Last login updated' })
-  @ApiResponse({ status: 404, description: 'User not found' })
-  async updateLastLogin(@Param('id') id: string): Promise<void> {
-    return this.usersService.updateLastLogin(id);
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Kullanıcı bilgilerini güncelle' })
+  @ApiParam({ name: 'id', description: 'Kullanıcı ID', type: 'string' })
+  @ApiBody({ type: UpdateUserDto })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Kullanıcı başarıyla güncellendi',
+  })
+  @ApiResponse({ status: 404, description: 'Kullanıcı bulunamadı' })
+  @ApiResponse({ status: 400, description: 'Geçersiz veri formatı' })
+  @ApiResponse({ status: 409, description: 'Email adresi zaten kullanılıyor' })
+  @ApiResponse({ status: 401, description: 'Yetkisiz erişim' })
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.update(id, updateUserDto);
   }
 }
