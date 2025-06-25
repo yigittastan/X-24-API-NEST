@@ -1,0 +1,103 @@
+x24-api-nest/
+├── src/
+│   ├── analytics/
+│   │   ├── analytics.controller.ts
+│   │   ├── analytics.module.ts
+│   │   └── analytics.service.ts
+│   ├── auth/
+│   │   ├── dto/
+│   │   ├── google/
+│   │   ├── guards/
+│   │   ├── jwt/
+│   │   │   └── jwt.strategy.ts
+│   │   ├── auth.controller.ts
+│   │   ├── auth.module.ts
+│   │   └── auth.service.ts
+│   ├── calendar/
+│   │   ├── calendar.controller.ts
+│   │   ├── calendar.module.ts
+│   │   └── calendar.service.ts
+│   ├── common/
+│   │   ├── constants/
+│   │   ├── decorators/
+│   │   ├── filters/
+│   │   ├── guards/
+│   │   ├── interceptors/
+│   │   └── utils/
+│   ├── config/
+│   │   └── swagger.config.ts
+│   ├── dashboard/
+│   │   ├── dashboard.controller.ts
+│   │   ├── dashboard.module.ts
+│   │   └── dashboard.service.ts
+│   ├── messages/
+│   │   ├── dto/
+│   │   ├── schemas/
+│   │   │   └── messages.schema.ts
+│   │   ├── messages.controller.ts
+│   │   ├── messages.module.ts
+│   │   └── messages.service.ts
+│   ├── notifications/
+│   │   ├── schemas/
+│   │   │   └── notifications.schema.ts
+│   │   ├── notifications.controller.ts
+│   │   ├── notifications.module.ts
+│   │   └── notifications.service.ts
+│   ├── projects/
+│   │   ├── projects.controller.ts
+│   │   ├── projects.module.ts
+│   │   └── projects.service.ts
+│   ├── roles/
+│   │   ├── enums/
+│   │   ├── roles.controller.ts
+│   │   ├── roles.module.ts
+│   │   └── roles.service.ts
+│   ├── tasks/
+│   │   ├── dto/
+│   │   ├── enums/
+│   │   ├── schemas/
+│   │   │   └── tasks.schema.ts
+│   │   ├── tasks.controller.ts
+│   │   ├── tasks.module.ts
+│   │   └── tasks.service.ts
+│   ├── time-tracking/
+│   │   ├── time-tracking.controller.ts
+│   │   ├── time-tracking.module.ts
+│   │   └── time-tracking.service.ts
+│   ├── users/
+│   │   ├── dto/
+│   │   │   ├── create-user.dto.ts
+│   │   │   ├── login-user.dto.ts
+│   │   │   └── update-user.dto.ts
+│   │   ├── schemas/
+│   │   │   └── users.schema.ts
+│   │   ├── users.controller.ts
+│   │   ├── users.module.ts
+│   │   └── users.service.ts
+│   ├── app.controller.ts
+│   ├── app.module.ts
+│   ├── app.service.ts
+│   └── main.ts
+├── test/
+│   ├── e2e/
+│   │   └── .gitkeep
+│   ├── integration/
+│   │   └── .gitkeep
+│   ├── unit/
+│   │   └── .gitkeep
+│   ├── app.e2e-spec.ts
+│   └── jest-e2e.json
+├── uploads/
+│   └── .gitkeep
+├── .env
+├── .gitignore
+├── .prettierrc
+├── alist.txt
+├── eslint.config.mjs
+├── listFiles.js
+├── nest-cli.json
+├── package-lock.json
+├── package.json
+├── README.md
+├── tsconfig.build.json
+└── tsconfig.json
