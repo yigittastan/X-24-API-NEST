@@ -91,7 +91,7 @@ export class UsersService {
       .exec();
   }
 
-  private mapToResponseDto(user: any): UserResponseDto {
+  public mapToResponseDto(user: any): UserResponseDto {
     return {
       id: user._id.toString(),
       email: user.email,
