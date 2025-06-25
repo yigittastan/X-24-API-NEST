@@ -1,21 +1,34 @@
 import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { setupSwagger } from './config/swagger.config';
+import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  const config = new DocumentBuilder()
-    .setTitle('Task Management API')
-    .setDescription('API documentation for the Task Management platform')
-    .setVersion('1.0')
-    .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' })
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api-docs', app, document);
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
 
-  await app.listen(5000);
-  console.log('Application running on http://localhost:5000');
-  console.log('Swagger docs available at http://localhost:5000/api-docs');
+  app.useGlobalFilters(new HttpExceptionFilter());
+
+  app.enableCors({
+    origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+    credentials: true,
+  });
+
+  // Swagger config burada tanımlı
+  setupSwagger(app);
+
+  const port = process.env.PORT || 5000;
+  await app.listen(port);
+
+  console.log(`🚀 Application running on http://localhost:${port}`);
+  console.log(`📚 Swagger docs available at http://localhost:${port}/api-docs`);
 }
 bootstrap();
