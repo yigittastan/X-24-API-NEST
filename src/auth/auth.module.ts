@@ -6,6 +6,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt/jwt.strategy';
 import { GoogleStrategy } from './google/google.strategy';
 import { UsersModule } from '../users/users.module';
+import { WorkspaceModule } from '../workspace/workspace.module'; // Eksik import
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
@@ -15,11 +16,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     JwtModule.registerAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
-        secret: config.get('JWT_SECRET'),
+        secret: config.get('JWT_SECRET') || 'default-secret-key',
         signOptions: { expiresIn: '1d' },
       }),
     }),
     UsersModule,
+    WorkspaceModule, // Eksik olan modül eklendi
   ],
   providers: [AuthService, JwtStrategy, GoogleStrategy],
   controllers: [AuthController],

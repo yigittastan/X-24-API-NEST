@@ -10,6 +10,6 @@ import { WorkspaceController } from './workspace.controller';
   ],
   providers: [WorkspaceService],
   controllers: [WorkspaceController],
-  exports: [WorkspaceService], // Auth için kullanılacak
+  exports: [WorkspaceService],
 })
 export class WorkspaceModule {}

@@ -9,22 +9,22 @@ export class TimeEntry extends Document {
   @Prop({ type: Types.ObjectId, ref: 'Workspace', required: true })
   workspaceId: Types.ObjectId;
 
-  @Prop({ required: true })
+  @Prop({ type: Date, required: true })
   startedAt: Date;
 
-  @Prop({ required: false, default: null })
+  @Prop({ type: Date, required: false, default: null })
   pausedAt: Date | null;
 
-  @Prop({ required: false, default: null })
+  @Prop({ type: Date, required: false, default: null })
   resumedAt: Date | null;
   
-  @Prop()
+  @Prop({ type: Date, required: false })
   finishedAt?: Date;
 
-  @Prop({ default: false })
+  @Prop({ type: Boolean, default: false })
   isActive: boolean;
 
-  @Prop({ default: 0 })
+  @Prop({ type: Number, default: 0 })
   totalPausedDuration: number;
 
   @Prop({ type: String, default: '' })

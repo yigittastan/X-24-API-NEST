@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -13,10 +14,17 @@ import { RolesModule } from './roles/roles.module';
 import { TasksModule } from './tasks/tasks.module';
 import { TimeTrackingModule } from './time-tracking/time-tracking.module';
 import { UsersModule } from './users/users.module';
+import { WorkspaceModule } from './workspace/workspace.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb+srv://tastanyigitumre:aWJcYXZppwxjJRVf@x24.7conb5w.mongodb.net/?retryWrites=true&w=majority&appName=X24'),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    MongooseModule.forRoot(
+      process.env.MONGO_URI ||
+        'mongodb+srv://tastanyigitumre:AqdWdNFUt4yJnEnl@x24-api.ehv8ibp.mongodb.net/?retryWrites=true&w=majority&appName=X24-Api',
+    ),
     AnalyticsModule,
     AuthModule,
     CalendarModule,
@@ -28,6 +36,7 @@ import { UsersModule } from './users/users.module';
     TasksModule,
     TimeTrackingModule,
     UsersModule,
+    WorkspaceModule, // Eksik olan modül eklendi
   ],
   controllers: [AppController],
   providers: [AppService],
