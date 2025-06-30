@@ -8,14 +8,11 @@ x24-api-nest/
 │   │   └── analytics.service.ts
 │   ├── auth/
 │   │   ├── dto/
-│   │   │   ├── auth-response.dto.ts
 │   │   │   ├── login.dto.ts
 │   │   │   └── register.dto.ts
 │   │   ├── google/
-│   │   ├── guards/
+│   │   │   └── google.strategy.ts
 │   │   ├── jwt/
-│   │   │   └── jwt.strategy.ts
-│   │   ├── strategies/
 │   │   │   └── jwt.strategy.ts
 │   │   ├── auth.controller.ts
 │   │   ├── auth.module.ts
@@ -126,14 +123,20 @@ x24-api-nest/
 │   │   └── time-tracking.service.ts
 │   ├── users/
 │   │   ├── dto/
-│   │   │   ├── create-user.dto.ts
-│   │   │   ├── update-user.dto.ts
-│   │   │   └── user-response.dto.ts
+│   │   │   └── create-user.dto.ts
 │   │   ├── schemas/
-│   │   │   └── users.schema.ts
+│   │   │   └── user.schema.ts
 │   │   ├── users.controller.ts
 │   │   ├── users.module.ts
 │   │   └── users.service.ts
+│   ├── workspace/
+│   │   ├── dto/
+│   │   │   └── create-workspace.dto.ts
+│   │   ├── schemas/
+│   │   │   └── workspace.schema.ts
+│   │   ├── workspace.controller.ts
+│   │   ├── workspace.module.ts
+│   │   └── workspace.service.ts
 │   ├── app.controller.ts
 │   ├── app.module.ts
 │   ├── app.service.ts
@@ -161,3 +164,171 @@ x24-api-nest/
 ├── README.md
 ├── tsconfig.build.json
 └── tsconfig.json
+
+
+fronta sen bir şey yapma  backen yapım şu na böyle x24-api-nest/
+├── src/
+│   ├── analytics/
+│   │   ├── dto/
+│   │   │   └── analytics-response.dto.ts
+│   │   ├── analytics.controller.ts
+│   │   ├── analytics.module.ts
+│   │   └── analytics.service.ts
+│   ├── auth/
+│   │   ├── dto/
+│   │   │   ├── login.dto.ts
+│   │   │   └── register.dto.ts
+│   │   ├── google/
+│   │   │   └── google.strategy.ts
+│   │   ├── jwt/
+│   │   │   └── jwt.strategy.ts
+│   │   ├── auth.controller.ts
+│   │   ├── auth.module.ts
+│   │   └── auth.service.ts
+│   ├── calendar/
+│   │   ├── dto/
+│   │   │   ├── create-event.dto.ts
+│   │   │   ├── event-response.dto.ts
+│   │   │   └── update-event.dto.ts
+│   │   ├── schemas/
+│   │   │   └── calendar-event.schema.ts
+│   │   ├── calendar.controller.ts
+│   │   ├── calendar.module.ts
+│   │   └── calendar.service.ts
+│   ├── common/
+│   │   ├── constants/
+│   │   ├── decorators/
+│   │   │   ├── get-user.decorator.ts
+│   │   │   └── roles.decorator.ts
+│   │   ├── enums/
+│   │   │   └── role.enum.ts
+│   │   ├── filters/
+│   │   │   └── http-exception.filter.ts
+│   │   ├── guards/
+│   │   │   ├── jwt-auth.guard.ts
+│   │   │   ├── roles.guard.ts
+│   │   │   └── ws-jwt.guard.ts
+│   │   ├── interfaces/
+│   │   │   ├── jwt-payload.interface.ts
+│   │   │   └── user.interface.ts
+│   │   ├── pipes/
+│   │   │   └── validation.pipe.ts
+│   │   └── utils/
+│   ├── config/
+│   │   ├── database.config.ts
+│   │   ├── jwt.config.ts
+│   │   └── swagger.config.ts
+│   ├── dashboard/
+│   │   ├── dto/
+│   │   │   └── dashboard-stats.dto.ts
+│   │   ├── dashboard.controller.ts
+│   │   ├── dashboard.module.ts
+│   │   └── dashboard.service.ts
+│   ├── messages/
+│   │   ├── dto/
+│   │   │   ├── create-message.dto.ts
+│   │   │   └── message-response.dto.ts
+│   │   ├── schemas/
+│   │   │   └── message.schema.ts
+│   │   ├── messages.controller.ts
+│   │   ├── messages.gateway.ts
+│   │   ├── messages.module.ts
+│   │   └── messages.service.ts
+│   ├── notifications/
+│   │   ├── dto/
+│   │   │   ├── create-notification.dto.ts
+│   │   │   └── notification-response.dto.ts
+│   │   ├── schemas/
+│   │   │   └── notification.schema.ts
+│   │   ├── notifications.controller.ts
+│   │   ├── notifications.gateway.ts
+│   │   ├── notifications.module.ts
+│   │   └── notifications.service.ts
+│   ├── projects/
+│   │   ├── dto/
+│   │   │   ├── create-project.dto.ts
+│   │   │   ├── project-response.dto.ts
+│   │   │   └── update-project.dto.ts
+│   │   ├── schemas/
+│   │   │   └── project.schema.ts
+│   │   ├── projects.controller.ts
+│   │   ├── projects.module.ts
+│   │   └── projects.service.ts
+│   ├── roles/
+│   │   ├── dto/
+│   │   │   ├── create-role.dto.ts
+│   │   │   └── update-role.dto.ts
+│   │   ├── enums/
+│   │   │   └── role.enum.ts
+│   │   ├── schemas/
+│   │   │   └── role.schema.ts
+│   │   ├── roles.controller.ts
+│   │   ├── roles.module.ts
+│   │   └── roles.service.ts
+│   ├── tasks/
+│   │   ├── dto/
+│   │   │   ├── create-task.dto.ts
+│   │   │   ├── task-filter.dto.ts
+│   │   │   ├── task-response.dto.ts
+│   │   │   └── update-task.dto.ts
+│   │   ├── enums/
+│   │   │   ├── task-priority.enum.ts
+│   │   │   └── task-status.enum.ts
+│   │   ├── schemas/
+│   │   │   └── task.schema.ts
+│   │   ├── tasks.controller.ts
+│   │   ├── tasks.module.ts
+│   │   └── tasks.service.ts
+│   ├── time-tracking/
+│   │   ├── dto/
+│   │   │   ├── create-time-entry.dto.ts
+│   │   │   ├── time-entry-response.dto.ts
+│   │   │   └── update-time-entry.dto.ts
+│   │   ├── schemas/
+│   │   │   └── time-entry.schema.ts
+│   │   ├── time-tracking.controller.ts
+│   │   ├── time-tracking.module.ts
+│   │   └── time-tracking.service.ts
+│   ├── users/
+│   │   ├── dto/
+│   │   │   └── create-user.dto.ts
+│   │   ├── schemas/
+│   │   │   └── user.schema.ts
+│   │   ├── users.controller.ts
+│   │   ├── users.module.ts
+│   │   └── users.service.ts
+│   ├── workspace/
+│   │   ├── dto/
+│   │   │   └── create-workspace.dto.ts
+│   │   ├── schemas/
+│   │   │   └── workspace.schema.ts
+│   │   ├── workspace.controller.ts
+│   │   ├── workspace.module.ts
+│   │   └── workspace.service.ts
+│   ├── app.controller.ts
+│   ├── app.module.ts
+│   ├── app.service.ts
+│   └── main.ts
+├── test/
+│   ├── e2e/
+│   │   └── .gitkeep
+│   ├── integration/
+│   │   └── .gitkeep
+│   ├── unit/
+│   │   └── .gitkeep
+│   ├── app.e2e-spec.ts
+│   └── jest-e2e.json
+├── uploads/
+│   └── .gitkeep
+├── .env
+├── .gitignore
+├── .prettierrc
+├── alist.txt
+├── eslint.config.mjs
+├── listFiles.js
+├── nest-cli.json
+├── package-lock.json
+├── package.json
+├── README.md
+├── tsconfig.build.json
+└── tsconfig.json mantığı anlatayım her kulanıc hesap açtığında kendi workspace i var oırad akendileri zaman tutabiliyoru bizim amacımız zamanları tutup bunları n hangi zaman başladığı hangi zaman bittiği olacak hangi zmana duruduğu ve böylece analytics kısmınto toplam çalışma süresini ne zman çlıştığı gib verileir toplayacağız öçrneğin saba 8 de iş başladı 12 öğlen arası yapıcak durdurdu sorna 13 başlayacka sornada 16 bitire tıkladı bunu bitire tıkladığında işini yazabilecek açıkalam olarka zorunlu olmasacak sorena be günün sonund agünlük grafie baktığına toplam çalışma süresi 15 aat olucak ama çalışma süresi grafine baktığımzda ikiye bölünük halde görecek sabah 8den 12 e kjada rve 13 den 16 ya kadar
