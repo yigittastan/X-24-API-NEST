@@ -10,12 +10,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: (req: Request) => {
         if (req && req.cookies) {
-          return req.cookies['accessToken']; // cookie'deki accessToken'ı oku
+          return req.cookies['accessToken'];
         }
         return null;
       },
       ignoreExpiration: false,
-      secretOrKey: config.get<string>('JWT_SECRET'),
+      secretOrKey: config.get<string>('JWT_SECRET')!, // ← burada ! ekledik
     });
   }
 
