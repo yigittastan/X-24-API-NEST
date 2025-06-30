@@ -6,7 +6,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt/jwt.strategy';
 import { GoogleStrategy } from './google/google.strategy';
 import { UsersModule } from '../users/users.module';
-import { WorkspaceModule } from '../workspace/workspace.module'; // Eksik import
+import { WorkspaceModule } from '../workspace/workspace.module'; 
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
@@ -21,7 +21,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       }),
     }),
     UsersModule,
-    WorkspaceModule, // Eksik olan modül eklendi
+    WorkspaceModule,
   ],
   providers: [AuthService, JwtStrategy, GoogleStrategy],
   controllers: [AuthController],

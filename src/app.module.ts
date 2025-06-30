@@ -36,7 +36,7 @@ import { WorkspaceModule } from './workspace/workspace.module';
     TasksModule,
     TimeTrackingModule,
     UsersModule,
-    WorkspaceModule, // Eksik olan modül eklendi
+    WorkspaceModule, 
   ],
   controllers: [AppController],
   providers: [AppService],

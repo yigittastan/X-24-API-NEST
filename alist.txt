@@ -331,4 +331,4 @@ fronta sen bir şey yapma  backen yapım şu na böyle x24-api-nest/
 ├── package.json
 ├── README.md
 ├── tsconfig.build.json
-└── tsconfig.json mantığı anlatayım her kulanıc hesap açtığında kendi workspace i var oırad akendileri zaman tutabiliyoru bizim amacımız zamanları tutup bunları n hangi zaman başladığı hangi zaman bittiği olacak hangi zmana duruduğu ve böylece analytics kısmınto toplam çalışma süresini ne zman çlıştığı gib verileir toplayacağız öçrneğin saba 8 de iş başladı 12 öğlen arası yapıcak durdurdu sorna 13 başlayacka sornada 16 bitire tıkladı bunu bitire tıkladığında işini yazabilecek açıkalam olarka zorunlu olmasacak sorena be günün sonund agünlük grafie baktığına toplam çalışma süresi 15 aat olucak ama çalışma süresi grafine baktığımzda ikiye bölünük halde görecek sabah 8den 12 e kjada rve 13 den 16 ya kadar
+└── tsconfig.json 
